@@ -1,0 +1,51 @@
+[gd_scene load_steps=8 format=3 uid="uid://dektxgaadsk6l"]
+
+[ext_resource type="Texture2D" uid="uid://ctie12udppmom" path="res://game/assets/kenney/textures/prototype_grid/Dark/texture_02.png" id="1_i1kbs"]
+[ext_resource type="PackedScene" uid="uid://b6h5uo6cyftkv" path="res://game/player/player.tscn" id="1_nevef"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_puyhj"]
+sky_top_color = Color(0.24728, 0.42632, 0.840056, 1)
+sky_horizon_color = Color(0.259828, 0.6707, 0.827303, 1)
+ground_horizon_color = Color(0.258824, 0.670588, 0.827451, 1)
+
+[sub_resource type="Sky" id="Sky_g6gk2"]
+sky_material = SubResource("ProceduralSkyMaterial_puyhj")
+
+[sub_resource type="Environment" id="Environment_jdnab"]
+background_mode = 2
+sky = SubResource("Sky_g6gk2")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dqyh6"]
+albedo_texture = ExtResource("1_i1kbs")
+uv1_triplanar = true
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_8mg3p"]
+
+[node name="World" type="Node3D"]
+
+[node name="Env" type="Node3D" parent="."]
+
+[node name="WorldEnv" type="WorldEnvironment" parent="Env"]
+environment = SubResource("Environment_jdnab")
+
+[node name="Sun" type="DirectionalLight3D" parent="Env"]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 7, 0)
+shadow_enabled = true
+
+[node name="Stage" type="Node3D" parent="."]
+
+[node name="Floor" type="StaticBody3D" parent="Stage"]
+
+[node name="Mesh" type="CSGBox3D" parent="Stage/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+material_override = SubResource("StandardMaterial3D_dqyh6")
+size = Vector3(80, 1, 80)
+
+[node name="Collision" type="CollisionShape3D" parent="Stage/Floor"]
+shape = SubResource("WorldBoundaryShape3D_8mg3p")
+
+[node name="Player" parent="." instance=ExtResource("1_nevef")]
+
+[editable path="Player"]
